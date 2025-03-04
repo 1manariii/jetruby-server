@@ -8,16 +8,20 @@ const repositoryService = new RepositoryService()
 class RepositoryController {
     async getAllRepositories(req, res) {
         const repositories = await db.query('SELECT * FROM repositories ORDER BY id ASC')
-        console.log('Получение данных')
+
         return res.json(repositories)
     }
 
     async getRepository(req, res) {
-        const {id} = req.query;
-
-        const repository = await db.query(`SELECT * FROM repositories WHERE id = ${id}`);
-
-        res.json({item: repository, message: `Найден репозиторий под id ${id}`})
+        const {id, name} = req.query;
+        if (id !== 'null') {
+            const repository = await db.query(`SELECT * FROM repositories WHERE id = ${id}`);
+            return res.json(repository)
+        }
+        if (name !== 'null') {
+            const repository = await db.query(`SELECT * FROM repositories WHERE name = '${name}'`);
+            return res.json(repository)
+        }
     }
 
     async updateRepositories(req, res) {
