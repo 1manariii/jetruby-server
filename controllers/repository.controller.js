@@ -19,8 +19,10 @@ class RepositoryController {
             return res.json(repository)
         }
         if (name !== 'null') {
-            const repository = await db.query(`SELECT * FROM repositories WHERE name = '${name}'`);
-            return res.json(repository)
+            // const repository = await db.query(`SELECT * FROM repositories WHERE name = '${name}'`);
+            const repositories = await db.query('SELECT * FROM repositories ORDER BY id ASC')
+            const foundedRepository = repositories.rows.filter(r=>r.name.indexOf(name) > -1)
+            return res.json(foundedRepository)
         }
     }
 
