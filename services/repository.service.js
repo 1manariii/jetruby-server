@@ -3,8 +3,26 @@ const axios = require("axios");
 
 
 class RepositoryService {
+    async getRepository (id, name) {
+        if (id !== 'null') {
+            return await db.query(`SELECT * FROM repositories WHERE id = ${id}`)
+        }
+        if (name !== 'null') {
+            return await db.query(`SELECT * FROM repositories WHERE name LIKE '${name}'`)
+        }
+    }
+
+    async getAllRepositories () {
+        const repositories = await db.query('SELECT * FROM repositories ORDER BY id ASC')
+        return repositories
+    }
+
     async updateRepositories () {
-        const response = await axios.get('https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=1')
+        const response = await axios.get('https://api.github.com/search/repositories?q=stars%3A%3E0&sort=stars&order=desc&page=1', {
+            headers: {
+                'Authorization': `Bearer ${process.env.GIT_TOKEN}`
+            }
+        })
 
         const {data} = response
         data.items.map((item, i) => {
