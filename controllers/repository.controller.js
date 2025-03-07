@@ -7,7 +7,7 @@ const repositoryService = new RepositoryService()
 
 class RepositoryController {
     async getAllRepositories(req, res) {
-        const repositories = repositoryService.getAllRepositories()
+        const repositories = await repositoryService.getAllRepositories()
         return res.json(repositories)
     }
 
